@@ -1,21 +1,13 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
-import Link from 'next/link';
+import Navbar from '../src/components/Navbar';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Next.js Routing Demo',
-  description: 'Demo for Next.js App Router',
+  title: 'HocTuThien - Học Để Sẻ Chia',
+  description: 'Nền tảng Mentoring kết hợp Thiện nguyện minh bạch.',
 };
 
 export default function RootLayout({
@@ -24,23 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        {/* Navigation chung cho toàn ứng dụng */}
-        <nav className="bg-gray-900 text-white p-4">
-          <div className="max-w-4xl mx-auto flex gap-6 flex-wrap">
-            <Link href="/" className="hover:text-blue-400 font-bold">1. Home</Link>
-            <Link href="/dashboard" className="hover:text-blue-400 font-bold">2. Dashboard</Link>
-            <Link href="/product/1" className="hover:text-blue-400 font-bold">3. Product (Dynamic)</Link>
-            <Link href="/feed" className="hover:text-blue-400 font-bold">4. Feed (Parallel & Intercept)</Link>
-            <Link href="/login" className="hover:text-purple-400 font-bold text-purple-300">5. Route Group (Auth)</Link>
-          </div>
-        </nav>
-        
-        {/* Nội dung chính của các page sẽ được render ở đây */}
-        <main className="flex-1 max-w-4xl mx-auto w-full p-4">
+    <html lang="vi">
+      <body className={`${inter.className} antialiased min-h-screen flex flex-col`}>
+        <Navbar />
+        <main className="flex-1">
           {children}
         </main>
+        <footer className="footer-gradient py-12 px-6 bg-slate-100 text-center text-slate-500">
+          <p>© 2026 HocTuThien. Được tạo bởi NghiaDPTWork.</p>
+        </footer>
       </body>
     </html>
   );
