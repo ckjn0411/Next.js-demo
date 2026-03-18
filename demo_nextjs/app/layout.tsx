@@ -1,21 +1,20 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import Link from 'next/link';
+import type { Metadata } from "next";
+import { Inter, Outfit } from "next/font/google";
+import "./globals.css";
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
-  title: 'Next.js Routing Demo',
-  description: 'Demo for Next.js App Router',
+  title: "Next.js Sparkle Demo",
+  description: "A beautifully styled Next.js application",
 };
 
 export default function RootLayout({
@@ -24,22 +23,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        {/* Navigation chung cho toàn ứng dụng */}
-        <nav className="bg-gray-900 text-white p-4">
-          <div className="max-w-4xl mx-auto flex gap-6 flex-wrap">
-            <Link href="/" className="hover:text-blue-400 font-bold">1. Home</Link>
-            <Link href="/dashboard" className="hover:text-blue-400 font-bold">2. Dashboard</Link>
-            <Link href="/product/1" className="hover:text-blue-400 font-bold">3. Product (Dynamic)</Link>
-            <Link href="/feed" className="hover:text-blue-400 font-bold">4. Feed (Parallel & Intercept)</Link>
-            <Link href="/login" className="hover:text-purple-400 font-bold text-purple-300">5. Route Group (Auth)</Link>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
+      <body className="bg-[#f8fafc] text-slate-900 antialiased min-h-screen relative overflow-hidden font-sans">
+        {/* Background Decorations */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-200/40 rounded-full blur-[120px] -z-10 animate-pulse" />
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-200/40 rounded-full blur-[120px] -z-10 animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+
+        <main className="min-h-screen flex items-center justify-center p-6 sm:p-12">
+          <div className="relative group w-full max-w-3xl">
+            {/* Glass effect container backdrop */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+
+            <div className="relative bg-white/80 backdrop-blur-2xl px-10 py-16 sm:px-16 sm:py-20 rounded-[2.2rem] shadow-2xl ring-1 ring-slate-200/50">
+              {children}
+            </div>
           </div>
-        </nav>
-        
-        {/* Nội dung chính của các page sẽ được render ở đây */}
-        <main className="flex-1 max-w-4xl mx-auto w-full p-4">
-          {children}
         </main>
       </body>
     </html>
