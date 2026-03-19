@@ -1,81 +1,50 @@
-# HocTuThien (Học Từ Thiện) - Next.js Project Architecture
+# Dự Án HocTuThien (FE Architecture) - v1.0
 
-Dự án **Học Từ Thiện (HocTuThien)** là nền tảng kết nối Mentoring và Thiện nguyện, giúp Mentee tìm được Mentor chất lượng, đồng thời chuyển hóa giá trị buổi học thành các khoản đóng góp minh bạch cho cộng đồng.
+**Created by:** NghiaDPTWork (Frontend Lead/Developer)
+
+**Date:** March 19, 2026
+
+Chào mừng bạn đến với HocTuThien. Hệ thống này được xây dựng dựa trên 3 trụ cột kỹ thuật: **Clean Architecture**, **Domain-Driven Design (DDD)**, và **SOLID**. Tài liệu này hướng dẫn bạn cách hiểu và đóng góp code cho dự án.
+
+## 1. Triết Lý Kiến Trúc
+
+### A. Clean Architecture
+
+Chúng ta tuân thủ quy tắc **Dependency Rule**: Tầng ngoài phụ thuộc tầng trong. UI hay API chỉ là chi tiết, logic nghiệp vụ là trái tim.
+
+- **Domain (Lõi):** Các định nghĩa thực thể, interface và logic thuần túy.
+- **Application (Use Cases):** Chứa các Custom Hooks. Đây là nơi điều phối (Orchestration) dữ liệu.
+- **Infrastructure (Adapter):** Nơi gọi API thực tế, cấu hình persistence.
+- **Presentation (UI):** Các React Components (Next.js App Router).
+
+### B. Domain-Driven Design (DDD)
+
+Chia dự án theo **Bounded Contexts** (Ngữ cảnh nghiệp vụ). Thay vì chia theo loại file, chúng ta chia theo Module nghiệp vụ:
+
+- `modules/booking`: Quản lý đặt lịch.
+- `modules/charity`: Quản lý ủng hộ, đối soát ngân hàng.
 
 ---
 
-## 🏛️ Kiến trúc Hệ thống (SOLID & DDD)
-
-Dự án áp dụng mô hình chuyên nghiệp để đảm bảo tính mở rộng và dễ bảo trì cho các tính năng phức tạp như Đối soát thanh toán, Quản lý lịch dạy và Phê duyệt hồ sơ.
-
-### 1. SOLID Principles Applied
-
-- **Single Responsibility (S):** Tách biệt logic xử lý (Hooks), gọi API (Services), và Giao diện (Components).
-- **Open/Closed (O):** Các thành phần như `Button`, `Input` trong `src/shared/components` cho phép mở rộng kiểu dáng qua props mà không cần thay đổi code lõi.
-- **Dependency Inversion (D):** Các hooks trong `domains/` đóng vai trò trung gian cung cấp dữ liệu cho `app/` (vùng entry-point).
-
-### 2. Domain-Driven Design (DDD)
-
-Cấu trúc được tổ chức theo nghiệp vụ chính của Học Từ Thiện:
+## 2. Cấu Trúc Thư Mục Chuẩn
 
 ```text
 src/
-├── app/                    # Routing & Pages (Next.js App Router)
-│   ├── (auth)/             # Route groups cho Login/Register
-│   ├── (mentoring)/        # Trang Mentor, Booking, Review
-│   ├── (charity)/          # Trang các chiến dịch gây quỹ
-│   └── api/                # Backend internal logic (Next.js API Routes)
-├── domains/                # CHỨA TOÀN BỘ LOGIC NGHIỆP VỤ (Core)
-│   ├── auth/               # Xác thực người dùng (Google Login)
-│   ├── user/               # Quản lý Profile (Mentee/Mentor) & Kích hoạt tài khoản
-│   ├── mentoring/          # Quản lý Booking, Lịch rảnh, Đánh giá Mentor
-│   └── charity/            # Đối soát donation, Quản lý quỹ/chiến dịch gây quỹ
-├── shared/                 # Thành phần dùng chung toàn dự án
-│   ├── components/         # Common UI (Button, Modal, Layout)
-│   ├── hooks/              # useDebounce, useLocalStorage...
-│   ├── libs/               # Axios instance, Prisma client, Google Auth lib
-│   └── constants/          # Message constants, API routes, Configs
-└── styles/                 # Global styles (Tailwind CSS)
+├── app/                  # Router & SEO (Server Components)
+├── modules/              # Lõi nghiệp vụ (Domain-Driven)
+    └── [module-name]/
+        ├── domain/       # Types, Entities, Repository Interfaces
+        ├── application/  # Custom Hooks (Lớp điều phối)
+        ├── infrastructure/ # API Implementation
+        └── presentation/ # Components đặc thù của module
 ```
 
 ---
 
-## 🛡️ Luồng Nghiệp Vụ Chính (Business Flow)
+## 3. Demo: Flow Đối Soát Ủng Hộ (Donation Sync)
 
-### 1. Activation Flow (Kích hoạt tài khoản)
-
-- Mentee đăng ký -> Chuyển khoản phí kích hoạt -> Hệ thống tự động kích hoạt để có quyền booking các buổi học có phí.
-
-### 2. Mentoring & Booking Flow
-
-- Mentee tìm Mentor -> Đặt lịch (chọn slot trống) -> Mentor nhận thông báo -> Thực hiện buổi học.
-- Điều kiện booking: Buổi học 0đ (không cần kích hoạt), Buổi học có phí (phải đã kích hoạt tài khoản).
-
-### 3. Donation & Payment Flow
-
-- Sau buổi học, Mentee quyên góp vào Quỹ thiện nguyện -> Hệ thống đối soát giao dịch dựa trên cú pháp chuyển khoản -> Cập nhật trạng thái buổi học là "Hoàn tất".
+Phần demo nằm tại `src/modules/charity/`. Đây là luồng đối soát tự động với API bên thứ 3.
 
 ---
 
-## 🛠️ Hướng dẫn Setup & Quy tắc Code
-
-### Quy tắc đặt tên và cấu trúc file trong Domain:
-
-Mỗi folder trong `domains/` nên có:
-
-- `components/`: UI đặc thù của domain (ví dụ: `MentorCard.tsx`).
-- `hooks/`: Logic nghiệp vụ (ví dụ: `useBooking.ts`).
-- `services/`: Nơi gọi API/DB (ví dụ: `bookingService.ts`).
-- `models/`: Interface/Types (ví dụ: `booking.interface.ts`).
-- `index.ts`: Export Public API cho domain đó.
-
-### Chạy dự án:
-
-```bash
-npm install
-npm run dev
-```
-
----
-
-_Dự án được khởi tạo và phát triển bởi NghiaDPTWork._
+HocTuThien Team - 2026
