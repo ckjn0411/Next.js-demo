@@ -1,6 +1,7 @@
 # Dự Án HocTuThien (FE Architecture) - v1.0
 
 **Created by:** NghiaDPTWork (Frontend Lead/Developer)
+
 **Date:** March 19, 2026
 
 Chào mừng bạn đến với HocTuThien. Hệ thống này được xây dựng dựa trên 3 trụ cột kỹ thuật: **Clean Architecture**, **Domain-Driven Design (DDD)**, và **SOLID**. Tài liệu này hướng dẫn bạn cách hiểu và đóng góp code cho dự án.
